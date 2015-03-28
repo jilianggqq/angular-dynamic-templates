@@ -1,13 +1,13 @@
 var app = angular.module('myApp', []);
 
-app.config(function ($sceDelegateProvider) {
+app.config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist(['self', '**']);
 });
 
 app.constant('URL', 'data/');
 
-app.factory('DataService', function ($http, URL) {
-    var getData = function () {
+app.factory('DataService', function($http, URL) {
+    var getData = function() {
         return $http.get(URL + 'content.json');
     };
 
@@ -16,8 +16,8 @@ app.factory('DataService', function ($http, URL) {
     };
 });
 
-app.factory('TemplateService', function ($http, URL) {
-    var getTemplates = function () {
+app.factory('TemplateService', function($http, URL) {
+    var getTemplates = function() {
         return $http.get(URL + 'templates.json');
     };
 
@@ -26,13 +26,13 @@ app.factory('TemplateService', function ($http, URL) {
     };
 });
 
-app.controller('ContentCtrl', function (DataService) {
+app.controller('ContentCtrl', function(DataService) {
     var ctrl = this;
 
     ctrl.content = [];
 
-    ctrl.fetchContent = function () {
-        DataService.getData().then(function (result) {
+    ctrl.fetchContent = function() {
+        DataService.getData().then(function(result) {
             ctrl.content = result.data;
         });
     };
@@ -40,8 +40,8 @@ app.controller('ContentCtrl', function (DataService) {
     ctrl.fetchContent();
 });
 
-app.directive('contentItem', function ($compile, TemplateService) {
-    var getTemplate = function (templates, contentType) {
+app.directive('contentItem', function($compile, TemplateService) {
+    var getTemplate = function(templates, contentType) {
         var template = '';
 
         switch (contentType) {
@@ -59,10 +59,10 @@ app.directive('contentItem', function ($compile, TemplateService) {
         return template;
     };
 
-    var linker = function (scope, element, attrs) {
+    var linker = function(scope, element, attrs) {
         scope.rootDirectory = 'images/';
 
-        TemplateService.getTemplates().then(function (response) {
+        TemplateService.getTemplates().then(function(response) {
             var templates = response.data;
 
             element.html(getTemplate(templates, scope.content.content_type));
@@ -79,5 +79,3 @@ app.directive('contentItem', function ($compile, TemplateService) {
         }
     };
 });
-
-
